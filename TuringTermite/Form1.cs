@@ -25,8 +25,17 @@ namespace TuringTermite
             this.Step_Button.Text = "Skip " + StepSkip.ToString() + " steps";
 
             this.simulation = new Simulation(this.SimulationBox.Size.Width, this.SimulationBox.Size.Height, CellsSize);
+            this.simulation.NoRulesPresented+= new System.EventHandler(this.ErrorOfRules);
             DrawGrid();
         }
+        private void ErrorOfRules(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            this.simulation = new Simulation(this.SimulationBox.Size.Width, this.SimulationBox.Size.Height, CellsSize);
+            this.label1.Text = this.simulation.Generation.ToString();
+            MessageBox.Show("There are no rules to continuer or simulation reached its end", "Error", MessageBoxButtons.OK);
+        }
+
         private void Play_button_Click(object sender, EventArgs e)
         {
             if (!this.simulation.RulesLoaded)
@@ -99,6 +108,7 @@ namespace TuringTermite
                 else
                 {
                     this.simulation = new Simulation(this.SimulationBox.Size.Width, this.SimulationBox.Size.Height, CellsSize);
+                    this.simulation.NoRulesPresented += new System.EventHandler(this.ErrorOfRules);
                     this.simulation.LoadRules(fileContent);
                 }
 

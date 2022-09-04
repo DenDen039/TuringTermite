@@ -17,7 +17,7 @@ namespace TuringTermite
 
     internal class Simulation
     {
-
+        public event EventHandler NoRulesPresented;
         private int[,] directions = new int[4, 2] { { 0, -1 }, {-1, 0 }, { 0, 1 }, { 1, 0 } };
 
         public int previous_change_row=0, previous_change_col=0;
@@ -68,22 +68,32 @@ namespace TuringTermite
         }
         public void NextGeneration()
         {
+            if (!rules_loaded)
+                return;
             generation++;
-            var rule = rules[(state, grid[termite_row, termite_col])];
-            if (rule == null)
-                throw new Exception("Wrong rules");
+            try
+            {
+                var rule = rules[(state, grid[termite_row, termite_col])];
+                if (rule == null)
+                    throw new Exception("Wrong rules");
+                grid[termite_row, termite_col] = rule.new_color;
+                previous_change_col = termite_col;
+                previous_change_row = termite_row;
+                state = rule.end_state;
+                Turn(rule.direction);
+                termite_row = (termite_row + directions[cur_direction, 0]) % height;
+                if (termite_row < 0)
+                    termite_row = height - 1;
+                termite_col = (termite_col + directions[cur_direction, 1]) % width;
+                if (termite_col < 0)
+                    termite_col = width - 1;
+            }
+            catch (Exception e){
+                NoRulesPresented?.Invoke(this,new EventArgs());
+                Console.Write(e.ToString());   
 
-            grid[termite_row, termite_col] = rule.new_color;
-            previous_change_col = termite_col;
-            previous_change_row = termite_row;
-            state = rule.end_state;
-            Turn(rule.direction);
-            termite_row = (termite_row + directions[cur_direction, 0]) % height;
-            if (termite_row < 0)
-                termite_row = height - 1;
-            termite_col = (termite_col + directions[cur_direction, 1]) % width;
-            if (termite_col < 0)
-                termite_col = width - 1;
+            }
+            
         }
 
         public bool LoadRules(string rules)
