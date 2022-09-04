@@ -1,9 +1,9 @@
 # TuringTermite
 ## Usage
-1. Create txt file with rules for termite (Rule MUST contain A 0 condition).
-2. Launch a programm.
-3. Load rules from txt file.
-4. You can export image by using export button.
+1. Create a txt file with rules for termite (Rule MUST contain A 0 condition).
+2. Launch a program.
+3. Load rules from the txt file.
+4. You can export an image by using the export button.
 
 ## User interface
 ![image](https://user-images.githubusercontent.com/49571325/188317601-68a9559b-ee2b-4062-b3ea-6b0e2e2f291f.png)
